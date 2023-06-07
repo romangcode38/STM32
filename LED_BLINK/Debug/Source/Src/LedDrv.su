@@ -1,0 +1,4 @@
+../Source/Src/LedDrv.c:21:6:LedDrv_Init	8	static
+../Source/Src/LedDrv.c:27:6:LedDrv_MainFunction1	16	static
+../Source/Src/LedDrv.c:39:6:LedDrv_MainFunction2	16	static
+../Source/Src/LedDrv.c:50:6:LedDrv_MainFunction3	16	static
