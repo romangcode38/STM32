@@ -8,9 +8,14 @@
 #ifndef INC_BUTTONDRV_H_
 #define INC_BUTTONDRV_H_
 
+#include <stdbool.h>
+
+
 void ButtonDrv_Init(void);
+uint16_t SetPeriod(void);
 void ButtonDrv_MainFunction(void);
-void ButtonDrv_SysTickCallback(void);
+void ChangeButtonVallue(uint16_t u16IdBtn, uint32_t u32_CurrentTick);
+void ButtonDrv_SysClickCallback(void);
 
 
 

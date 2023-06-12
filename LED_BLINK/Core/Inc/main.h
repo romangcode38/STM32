@@ -71,9 +71,10 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define USER_BTN_Pin LL_GPIO_PIN_13
 #define USER_BTN_GPIO_Port GPIOC
-#define USER_BTN_EXTI_IRQn EXTI4_15_IRQn
 #define MCO_Pin LL_GPIO_PIN_0
 #define MCO_GPIO_Port GPIOF
+#define LED_RED_Pin LL_GPIO_PIN_1
+#define LED_RED_GPIO_Port GPIOA
 #define LED_GREEN_Pin LL_GPIO_PIN_5
 #define LED_GREEN_GPIO_Port GPIOA
 #define TMS_Pin LL_GPIO_PIN_13

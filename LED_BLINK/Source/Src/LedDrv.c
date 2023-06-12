@@ -6,54 +6,62 @@
  */
 
 #include "main.h"
-#include "LedDrv.h"
 
-#define TASK_PERIOD1		(1u)
-#define TASK_PERIOD2		(5u)
-#define TASK_PERIOD3		(20u)
 
-#define LED_BLINK1		(1000u/TASK_PERIOD1)
-#define LED_BLINK2		(1000u/TASK_PERIOD2)
-#define LED_BLINK3		(1000u/TASK_PERIOD3)
+unsigned int ru32_LedTimer = 0u;
+volatile unsigned int uLedBlink = 0;
 
-static unsigned int ru32_LedTimer = 0u;
+typedef struct {
+    uint16_t u16LedSts;
+    uint16_t u16LedId;
+    uint16_t u16LedPeriod;
+}LedConfig;
+
+
+LedConfig ledConfig;
 
 void LedDrv_Init(void)
 {
-//	LL_GPIO_SetOutputPin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-	LED_GREEN_GPIO_Port ->BSRR = LED_GREEN_Pin;
+	LED_GREEN_GPIO_Port ->BRR = LED_GREEN_Pin;
+	LED_RED_GPIO_Port ->BRR = LED_RED_Pin;
+
 }
 
-void LedDrv_MainFunction1(void)
+void f_ConfigValueSet(unsigned int u16Sts,unsigned int u16Id, unsigned int u16Period)
 {
-	ru32_LedTimer++;
-	if(LED_BLINK1 <= ru32_LedTimer)
+	ledConfig.u16LedId = u16Id;
+	ledConfig.u16LedSts = u16Sts;
+	ledConfig.u16LedPeriod = u16Period;
+}
+
+void LedDrv_MainFunction(void)
+{
+	if(ledConfig.u16LedSts != 0u)
 	{
-//		LL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		uint32_t odr = READ_REG(LED_GREEN_GPIO_Port->ODR);
-		WRITE_REG(LED_GREEN_GPIO_Port->BSRR, ((odr & LED_GREEN_Pin) << 16u) | (~odr & LED_GREEN_Pin));
-		ru32_LedTimer = 0u;
+		if (ledConfig.u16LedId == 2)
+		{
+			uLedBlink = 1000 / ledConfig.u16LedPeriod;
+			if(uLedBlink <= ru32_LedTimer++)
+			{
+				uint32_t odr = READ_REG(LED_RED_GPIO_Port->ODR);
+				WRITE_REG(LED_RED_GPIO_Port->BSRR, ((odr & LED_RED_Pin) << 16u) | (~odr & LED_RED_Pin));
+				ru32_LedTimer = 0u;
+			}
+		}
+		else if (ledConfig.u16LedId == 1)
+		{
+			uLedBlink = 1000 / ledConfig.u16LedPeriod;
+			if(uLedBlink <= ru32_LedTimer++)
+			{
+				uint32_t odr = READ_REG(LED_GREEN_GPIO_Port->ODR);
+				WRITE_REG(LED_GREEN_GPIO_Port->BSRR, ((odr & LED_GREEN_Pin) << 16u) | (~odr & LED_GREEN_Pin));
+				ru32_LedTimer = 0u;
+			}
+		}
 	}
-}
-
-void LedDrv_MainFunction2(void)
-{
-	ru32_LedTimer++;
-	if(LED_BLINK2 <= ru32_LedTimer)
+	else
 	{
-		uint32_t odr = READ_REG(LED_GREEN_GPIO_Port->ODR);
-		WRITE_REG(LED_GREEN_GPIO_Port->BSRR, ((odr & LED_GREEN_Pin) << 16u) | (~odr & LED_GREEN_Pin));
-		ru32_LedTimer = 0u;
-	}
-}
-
-void LedDrv_MainFunction3(void)
-{
-	ru32_LedTimer++;
-	if(LED_BLINK3 <= ru32_LedTimer)
-	{
-		uint32_t odr = READ_REG(LED_GREEN_GPIO_Port->ODR);
-		WRITE_REG(LED_GREEN_GPIO_Port->BSRR, ((odr & LED_GREEN_Pin) << 16u) | (~odr & LED_GREEN_Pin));
-		ru32_LedTimer = 0u;
+		LED_GREEN_GPIO_Port ->BRR = LED_GREEN_Pin;
+		LED_RED_GPIO_Port ->BRR = LED_RED_Pin;
 	}
 }
