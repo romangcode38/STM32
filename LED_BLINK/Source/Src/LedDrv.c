@@ -23,14 +23,14 @@ LedConfig ledConfig;
 void LedDrv_Init(void)
 {
 	LED_GREEN_GPIO_Port ->BRR = LED_GREEN_Pin;
-	LED_RED_GPIO_Port ->BRR = LED_RED_Pin;
+//	LED_RED_GPIO_Port ->BRR = LED_RED_Pin;
 
 }
 
 void f_ConfigValueSet(unsigned int u16Sts,unsigned int u16Id, unsigned int u16Period)
 {
-	ledConfig.u16LedId = u16Id;
 	ledConfig.u16LedSts = u16Sts;
+	ledConfig.u16LedId = u16Id;
 	ledConfig.u16LedPeriod = u16Period;
 }
 
@@ -58,10 +58,5 @@ void LedDrv_MainFunction(void)
 				ru32_LedTimer = 0u;
 			}
 		}
-	}
-	else
-	{
-		LED_GREEN_GPIO_Port ->BRR = LED_GREEN_Pin;
-		LED_RED_GPIO_Port ->BRR = LED_RED_Pin;
 	}
 }

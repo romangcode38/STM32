@@ -1,4 +1,3 @@
-stm32g0xx_ll_utils.h:296:22:LL_InitTick	1
 stm32g0xx_ll_rcc.h:1254:22:LL_RCC_HSE_EnableBypass	1
 stm32g0xx_ll_rcc.h:1264:22:LL_RCC_HSE_DisableBypass	1
 stm32g0xx_ll_rcc.h:1274:22:LL_RCC_HSE_Enable	1
@@ -13,6 +12,7 @@ stm32g0xx_ll_rcc.h:2508:22:LL_RCC_PLL_Enable	1
 stm32g0xx_ll_rcc.h:2529:26:LL_RCC_PLL_IsReady	2
 stm32g0xx_ll_rcc.h:2566:22:LL_RCC_PLL_ConfigDomain_SYS	1
 stm32g0xx_ll_rcc.h:3433:22:LL_RCC_PLL_EnableDomain_SYS	1
+stm32g0xx_ll_utils.h:296:22:LL_InitTick	1
 stm32g0xx_ll_system.h:1972:22:LL_FLASH_SetLatency	1
 stm32g0xx_ll_system.h:1985:26:LL_FLASH_GetLatency	1
 stm32g0xx_ll_utils.c:153:6:LL_Init1msTick	1

@@ -1,0 +1,4 @@
+../Source/Src/CircularBuffer.c:13:6:f_isFullFIFOBuffer	16	static
+../Source/Src/CircularBuffer.c:25:6:f_isEmptyFIFOBuffer	16	static
+../Source/Src/CircularBuffer.c:50:6:f_addElemFIFOBuffer	16	static
+../Source/Src/CircularBuffer.c:74:6:f_getElemFIFOBuffer	16	static

@@ -1,0 +1,4 @@
+../Source/Src/AdcDrv.c:14:6:AdcDrv_Init	8	static
+../Source/Src/AdcDrv.c:21:6:AdcDrv_MainFunction	8	static
+../Source/Src/AdcDrv.c:28:6:AdcConverter_Value	8	static
+../Source/Src/AdcDrv.c:35:9:AdcExtract_Value	8	static

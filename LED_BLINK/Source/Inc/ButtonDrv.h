@@ -12,10 +12,12 @@
 
 
 void ButtonDrv_Init(void);
-uint16_t SetPeriod(void);
+void SetPeriod(uint16_t u16StateBtn);
+uint32_t f_ReturnValuePeriod();
 void ButtonDrv_MainFunction(void);
 void ChangeButtonVallue(uint16_t u16IdBtn, uint32_t u32_CurrentTick);
 void ButtonDrv_SysClickCallback(void);
+uint32_t f_GetReturnValuePeriod();
 
 
 

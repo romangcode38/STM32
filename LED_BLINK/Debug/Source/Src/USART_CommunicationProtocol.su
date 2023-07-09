@@ -1,0 +1,5 @@
+../Source/Src/USART_CommunicationProtocol.c:24:6:f_USARTCommProt_Main	24	static
+../Source/Src/USART_CommunicationProtocol.c:116:9:f_USARTCommProt_IsCRCByte	24	static
+../Source/Src/USART_CommunicationProtocol.c:130:6:f_USARTCommProt_ClrByte	24	static
+../Source/Src/USART_CommunicationProtocol.c:142:6:f_USARTCommProt_IsProcessData	16	static
+../Source/Src/USART_CommunicationProtocol.c:158:6:f_USARTCommProt_IsDatPacketTightening	24	static

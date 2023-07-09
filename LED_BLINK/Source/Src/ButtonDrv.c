@@ -13,17 +13,17 @@
 #define ButtonOFF		(0u)
 
 static volatile unsigned int ru32_SysClickBtn = 0u;
+static volatile unsigned int ru32_TickBtn = 0u;
 
-uint16_t ru16_StateBtn;
 
-volatile uint16_t u16BtnSetPeriod = 0;
-int contor = 0;
+uint16_t ru16_StateBtn = SET;
 
 typedef struct
 {
 	uint16_t u16IdBtn;
 	GPIO_TypeDef* Port;
 	uint32_t Pin;
+	uint16_t PrevState;
 
 }ButtonConfig;
 
@@ -35,27 +35,34 @@ void ButtonDrv_Init(void)
 	buttonConfig.u16IdBtn = 1;
 	buttonConfig.Port = USER_BTN_GPIO_Port;
 	buttonConfig.Pin = USER_BTN_Pin;
-
+	buttonConfig.PrevState = RESET;
 	ru32_SysClickBtn = 0;
 }
 
-
-void SetPeriod(uint16_t StateBtn)
+uint32_t f_GetReturnValuePeriod()
 {
-	if (ru16_StateBtn == SET)
+	return ru32_TickBtn;
+}
+
+void SetPeriod(uint16_t u16StateBtn)
+{
+	if (u16StateBtn == SET)
 	{
-		ChangeButtonVallue(buttonConfig.u16IdBtn, ru32_SysClickBtn);
-		contor = 1;
-	}
-	else if (ru16_StateBtn == RESET)
-	{
-		if (contor == 1) {
-			ru32_SysClickBtn = 0;
-			contor = 0;
+		if(buttonConfig.PrevState != u16StateBtn)
+		{
+			ru32_TickBtn = ru32_SysClickBtn;
+			f_GetReturnValuePeriod();
+			ru32_SysClickBtn = 0u;
 		}
+	}
+	else if (u16StateBtn == RESET)
+	{
 		ru32_SysClickBtn++;
 	}
+	buttonConfig.PrevState = u16StateBtn;
 }
+
+
 
 void ButtonDrv_MainFunction()
 {
@@ -64,33 +71,28 @@ void ButtonDrv_MainFunction()
 	SetPeriod(ru16_StateBtn);
 }
 
-void ChangeButtonVallue(uint16_t u16IdBtn, uint32_t u32Tick)
-{
-	if (1 <= u32Tick && u32Tick <= 500)
-	{
-		u16BtnSetPeriod = 1;
-		f_ConfigValueSet(ButtonON, u16IdBtn, u16BtnSetPeriod);
-	}
-	else if (500 <= u32Tick && u32Tick <= 1000)
-	{
-		u16BtnSetPeriod = 2;
-		f_ConfigValueSet(ButtonON, u16IdBtn, u16BtnSetPeriod);
-	}
-	else if (1000 <= u32Tick && u32Tick <= 2000)
-	{
-		u16BtnSetPeriod = 5;
-		f_ConfigValueSet(ButtonON, u16IdBtn, u16BtnSetPeriod);
-	}
-
-	else if (2000 <= u32Tick && u32Tick <= 3000)
-	{
-		u16BtnSetPeriod = 10;
-		f_ConfigValueSet(ButtonON, u16IdBtn, u16BtnSetPeriod);
-	}
-	else
-	{
-		ru32_SysClickBtn = 0;
-		u16BtnSetPeriod = 0;
-		f_ConfigValueSet(ButtonOFF, u16IdBtn, u16BtnSetPeriod);
-	}
-}
+//void ChangeButtonVallue(uint16_t u16IdBtn, uint32_t u32Tick)
+//{
+//	if (0 <= u32Tick && u32Tick <= 500)
+//	{
+//		f_ConfigValueSet(ButtonON, u16IdBtn, 1);
+//	}
+//	else if (500 <= u32Tick && u32Tick <= 1000)
+//	{
+//		f_ConfigValueSet(ButtonON, u16IdBtn, 2);
+//	}
+//	else if (1000 <= u32Tick && u32Tick <= 2000)
+//	{
+//		f_ConfigValueSet(ButtonON, u16IdBtn, 5);
+//	}
+//
+//	else if (2000 <= u32Tick && u32Tick <= 3000)
+//	{
+//		f_ConfigValueSet(ButtonON, u16IdBtn, 10);
+//	}
+//	else if (3000 <= u32Tick)
+//	{
+//		f_ConfigValueSet(ButtonOFF, u16IdBtn, 0);
+//		u32Tick = 0;
+//	}
+//}

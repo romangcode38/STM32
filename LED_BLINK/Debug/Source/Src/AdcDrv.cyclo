@@ -1,0 +1,4 @@
+AdcDrv.c:14:6:AdcDrv_Init	1
+AdcDrv.c:21:6:AdcDrv_MainFunction	1
+AdcDrv.c:28:6:AdcConverter_Value	1
+AdcDrv.c:35:9:AdcExtract_Value	1

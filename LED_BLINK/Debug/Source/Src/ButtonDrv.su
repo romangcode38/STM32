@@ -1,5 +1,5 @@
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_gpio.h:776:26:LL_GPIO_IsInputPinSet	16	static
 ../Source/Src/ButtonDrv.c:33:6:ButtonDrv_Init	8	static
-../Source/Src/ButtonDrv.c:43:6:SetPeriod	16	static
-../Source/Src/ButtonDrv.c:60:6:ButtonDrv_MainFunction	8	static
-../Source/Src/ButtonDrv.c:67:6:ChangeButtonVallue	16	static
+../Source/Src/ButtonDrv.c:42:10:f_GetReturnValuePeriod	8	static
+../Source/Src/ButtonDrv.c:47:6:SetPeriod	16	static
+../Source/Src/ButtonDrv.c:67:6:ButtonDrv_MainFunction	8	static

@@ -10,6 +10,11 @@
 
 #include "LedDrv.h"
 #include "ButtonDrv.h"
+#include "USARTDrv.h"
+#include "TheAPP.h"
+#include "USART_CommunicationProtocol.h"
+#include "Test.h"
+#include "AdcDrv.h"
 
 static volatile unsigned int ru32_SysTick = 0u;
 static volatile unsigned int ru32_OldSysTick = 0u;
@@ -22,6 +27,10 @@ void EcuM_0(void)
 	EcuM_Init();
 	ButtonDrv_Init();
 	LedDrv_Init();
+	USARTDrv_Init();
+	TheApp_Init();
+	AdcDrv_Init();
+
 	while(1)
 	{
 		if (ru32_OldSysTick != ru32_SysTick)
@@ -35,10 +44,6 @@ void EcuM_0(void)
 void EcuM_SysTickCallBack(void)
 {
 	ru32_SysTick++;
-	if(ru32_SysTick == 10000)
-	{
-		ru32_SysTick = 0;
-	}
 }
 
 void EcuM_Init(void)
@@ -53,6 +58,13 @@ void EcuM_MainFunction(void)
 {
 	ButtonDrv_MainFunction();
 	LedDrv_MainFunction();
+	USARTDrv_MainFunction();
+	TheAPP_MainFunction();
+	f_USARTCommProt_Main();
+	AdcDrv_MainFunction();
+
+//	Test_Drv();
+
 }
 
 

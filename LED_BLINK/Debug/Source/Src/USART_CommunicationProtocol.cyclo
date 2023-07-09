@@ -1,0 +1,5 @@
+USART_CommunicationProtocol.c:24:6:f_USARTCommProt_Main	14
+USART_CommunicationProtocol.c:116:9:f_USARTCommProt_IsCRCByte	2
+USART_CommunicationProtocol.c:130:6:f_USARTCommProt_ClrByte	2
+USART_CommunicationProtocol.c:142:6:f_USARTCommProt_IsProcessData	2
+USART_CommunicationProtocol.c:158:6:f_USARTCommProt_IsDatPacketTightening	1

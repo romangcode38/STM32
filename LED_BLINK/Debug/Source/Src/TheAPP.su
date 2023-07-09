@@ -1,0 +1,5 @@
+../Source/Src/TheAPP.c:31:6:TheApp_Init	8	static
+../Source/Src/TheAPP.c:38:6:TheAPP_MainFunction	8	static
+../Source/Src/TheAPP.c:57:10:TheAPP_SetPeriodParameters	24	static
+../Source/Src/TheAPP.c:84:6:TheAPP_GetClickButton	8	static
+../Source/Src/TheAPP.c:105:6:TheAPP_CallBack	16	static
