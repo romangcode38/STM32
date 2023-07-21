@@ -1,4 +1,9 @@
-AdcDrv.c:14:6:AdcDrv_Init	1
-AdcDrv.c:21:6:AdcDrv_MainFunction	1
-AdcDrv.c:28:6:AdcConverter_Value	1
-AdcDrv.c:35:9:AdcExtract_Value	1
+stm32g0xx_ll_adc.h:4518:22:LL_ADC_Enable	1
+stm32g0xx_ll_adc.h:4601:22:LL_ADC_StartCalibration	1
+stm32g0xx_ll_adc.h:4617:26:LL_ADC_IsCalibrationOnGoing	2
+stm32g0xx_ll_adc.h:4648:22:LL_ADC_REG_StartConversion	1
+stm32g0xx_ll_adc.h:4724:26:LL_ADC_REG_ReadConversionData12	1
+stm32g0xx_ll_adc.h:4829:26:LL_ADC_IsActiveFlag_EOC	2
+AdcDrv.c:19:6:AdcDrv_Init	2
+AdcDrv.c:28:6:AdcDrv_MainFunction	4
+AdcDrv.c:53:10:AdcSetConverter_Value	1

@@ -1,0 +1,4 @@
+CDD_Thermistor_CalcValue.c:248:6:Thermistor_InitFunction	1
+CDD_Thermistor_CalcValue.c:254:6:Thermistor_CalculateResistance	1
+CDD_Thermistor_CalcValue.c:261:6:Thermistor_CalculateGradeCelsius	4
+CDD_Thermistor_CalcValue.c:272:6:Thermistor_MainFunction	1

@@ -1,0 +1,3 @@
+../Source/Src/ADC_ConverterValue.c:16:6:Adc_ConverterValue_Init	8	static
+../Source/Src/ADC_ConverterValue.c:21:10:AdcCalculateVOLTAGE	8	static
+../Source/Src/ADC_ConverterValue.c:27:6:AdcConverterValue_MainFunction	8	static

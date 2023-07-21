@@ -1,3 +1,4 @@
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_utils.h:296:22:LL_InitTick	16	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_rcc.h:1254:22:LL_RCC_HSE_EnableBypass	8	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_rcc.h:1264:22:LL_RCC_HSE_DisableBypass	8	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_rcc.h:1274:22:LL_RCC_HSE_Enable	8	static
@@ -12,7 +13,6 @@
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_rcc.h:2529:26:LL_RCC_PLL_IsReady	8	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_rcc.h:2566:22:LL_RCC_PLL_ConfigDomain_SYS	24	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_rcc.h:3433:22:LL_RCC_PLL_EnableDomain_SYS	8	static
-../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_utils.h:296:22:LL_InitTick	16	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_system.h:1972:22:LL_FLASH_SetLatency	16	static
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_system.h:1985:26:LL_FLASH_GetLatency	8	static
 ../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_utils.c:153:6:LL_Init1msTick	16	static

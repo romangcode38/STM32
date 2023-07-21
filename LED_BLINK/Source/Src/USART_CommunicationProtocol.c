@@ -12,6 +12,8 @@ TE_USART_StateMachine ActualState = WAIT_StartByte;
 TU_USART_Packet TU_CommPacketData;
 uint8_t u8PacketReceived[LENGTH_DATA_ARRAY_RECIVED];
 
+TU_ValuePacketUSARTMotor Tu_ValuePacketUSARTMotor;
+
 
 uint16_t u16DelayDataBetween;
 uint8_t u8LengthReceived;
@@ -19,6 +21,12 @@ uint16_t u16DataIndex = 0u;
 uint16_t u16UsartSentData = 0u;
 uint16_t u16Index = 0;
 
+/*---------------------------------------------------------*/
+
+void f_USARTCommProt_Init(void)
+{
+	Tu_ValuePacketUSARTMotor.fValuePacketUSARTMotor = 0.f;
+}
 /*---------------------------------------------------------*/
 
 void f_USARTCommProt_Main(void)
@@ -44,7 +52,7 @@ void f_USARTCommProt_Main(void)
 				}
 				case WAIT_CommandByte:
 				{
-					if(USART_IS_SUPPORTED_CMD(u8DataReceived, CMD_SET_LED_PERIOD))
+					if(USART_IS_SUPPORTED_CMD(u8DataReceived, CMD_SET_LED_PERIOD) || USART_IS_SUPPORTED_CMD(u8DataReceived, CMD_SET_STEP_MOTOR))
 					{
 						TU_CommPacketData.ST_USART_Packet.CmdByte = u8DataReceived;
 						ActualState = WAIT_LengthByte;
@@ -142,14 +150,27 @@ void f_USARTCommProt_ClrByte(TU_USART_Packet* TU_CommPacketData, uint8_t u8Posit
 void f_USARTCommProt_IsProcessData()
 {
 	uint16_t u16InformationData = 0;
+	uint16_t u16IndexDataMotor;
+	uint16_t u16IndexDataByte = 3;
 
 	if(TU_CommPacketData.ST_USART_Packet.CmdByte == CMD_SET_LED_PERIOD)
 	{
 		u16InformationData = TU_CommPacketData.ST_USART_Packet.DataByte[0] << 8;
 		u16InformationData |= TU_CommPacketData.ST_USART_Packet.DataByte[1];
-		TheAPP_CallBack(u16InformationData);
+		TheAPP_CallBack(CMD_SET_LED_PERIOD, u16InformationData);
 
 	}
+	if(TU_CommPacketData.ST_USART_Packet.CmdByte == CMD_SET_STEP_MOTOR)
+	{
+
+		for (u16IndexDataMotor = 0; u16IndexDataMotor < DATA_LEGTH_MOTOR; u16IndexDataMotor++)
+		{
+			Tu_ValuePacketUSARTMotor.TS_ValueUSART.u8ArrayDataMotor[u16IndexDataMotor] = TU_CommPacketData.ST_USART_Packet.DataByte[u16IndexDataByte];
+			u16IndexDataByte--;
+		}
+		TheAPP_CallBack_Motor(CMD_SET_STEP_MOTOR, &Tu_ValuePacketUSARTMotor.fValuePacketUSARTMotor);
+	}
+
 }
 
 /*---------------------------------------------------------*/

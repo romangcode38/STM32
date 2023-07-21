@@ -35,17 +35,6 @@ bool f_isEmptyFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer)
 	}
 }
 
-//uint16_t f_getNumberOfElementsFIFO(CircularFIFOBuffer* CircularFIFOBuffer)
-//{
-//	if (CircularFIFOBuffer->u16Head >= CircularFIFOBuffer->u16Tail)
-//	{
-//		return (uint16_t) (CircularFIFOBuffer->u16Head - CircularFIFOBuffer->u16Tail);
-//	}
-//	else
-//	{
-//		return (uint16_t) (BUFFER_SIZE - CircularFIFOBuffer->u16Head + CircularFIFOBuffer->u16Tail);
-//	}
-//}
 
 bool f_addElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t data)
 {

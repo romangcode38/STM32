@@ -20,7 +20,6 @@ uint16_t ru16_StateBtn = SET;
 
 typedef struct
 {
-	uint16_t u16IdBtn;
 	GPIO_TypeDef* Port;
 	uint32_t Pin;
 	uint16_t PrevState;
@@ -32,7 +31,6 @@ ButtonConfig buttonConfig;
 
 void ButtonDrv_Init(void)
 {
-	buttonConfig.u16IdBtn = 1;
 	buttonConfig.Port = USER_BTN_GPIO_Port;
 	buttonConfig.Pin = USER_BTN_Pin;
 	buttonConfig.PrevState = RESET;

@@ -1,0 +1,6 @@
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_gpio.h:857:22:LL_GPIO_SetOutputPin	16	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_gpio.h:886:22:LL_GPIO_ResetOutputPin	16	static
+../Source/Src/MotorDrvStepper.c:30:6:f_MotorSteperDrv_Init	24	static
+../Source/Src/MotorDrvStepper.c:45:6:f_MotorSteperDrv_StepSetting	16	static
+../Source/Src/MotorDrvStepper.c:147:6:f_MotorSteperDrv_SetStep	16	static
+../Source/Src/MotorDrvStepper.c:152:6:f_MotorSteperDrv_MainFunction	8	static

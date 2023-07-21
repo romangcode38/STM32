@@ -29,12 +29,13 @@
 #define CMD_TRANSMISION_REQUEST	(0x81)
 
 #define CMD_SET_LED_PERIOD		(0x01)
-#define CMD_SET_MOTOR_DR		(0x02)
-#define CMD_SET_MOTOR_DL		(0x03)
+#define CMD_SET_STEP_MOTOR		(0x02)
+
 
 #define USART_IS_START_BYTE(Byte)			((Byte == START_BYTE_VALUE) ? true : false)
 #define USART_IS_SUPPORTED_CMD(Byte,CMD)	((Byte == CMD) ? true : false)
 #define USART_CHECK_TIMEOUT(ValueTime)		((ValueTime >= TIME_OUT) ? true : false)
+
 
 
 
@@ -45,6 +46,12 @@
 #define HEADER_LENGTH	(START_BYTE_LENGTH + SIZE_BYTE_LENGTH + CMD_BYTE_LENGTH)
 #define DATA_LENGTH		(BUFFER_LENGTH - HEADER_LENGTH)
 #define HEADER_LENGHT_DATA	(HEADER_LENGTH + SIZE_LENGTH)
+
+
+
+
+
+#define DATA_LEGTH_MOTOR	(4u)
 
 typedef enum
 {
@@ -69,6 +76,17 @@ typedef union
 }TU_USART_Packet;
 
 
+typedef union
+{
+	float fValuePacketUSARTMotor;
+    struct
+	{
+		uint8_t u8ArrayDataMotor[DATA_LEGTH_MOTOR];
+	}TS_ValueUSART;
+}TU_ValuePacketUSARTMotor;
+
+
+void f_USARTCommProt_Init(void);
 uint8_t f_USARTCommProt_IsCRCByte(uint8_t* CommPacketData, uint8_t u8LengthPacket);
 void f_USARTCommProt_Main(void);
 void f_USARTCommProt_ClrByte(TU_USART_Packet* TU_CommPacketData, uint8_t u8PositionToClean);

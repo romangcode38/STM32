@@ -1,0 +1,4 @@
+Motor_ConverterDegreeToStep.c:21:6:Motor_ConvDegreeTeStep_Init	1
+Motor_ConverterDegreeToStep.c:26:6:Motor_ConvDegreeToStep_GETValueFromUSART	1
+Motor_ConverterDegreeToStep.c:31:6:Motor_ConvDegreeTeStep_SETValueStep	1
+Motor_ConverterDegreeToStep.c:39:6:Motor_ConvDegreeTeStep_MainFunction	1
