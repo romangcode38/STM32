@@ -9,9 +9,19 @@
 #define INC_BUTTONDRV_H_
 
 #include <stdbool.h>
+#include "LedDrv.h"
+#include "main.h"
+
+typedef struct
+{
+	GPIO_TypeDef* Port;
+	uint32_t Pin;
+	uint16_t PrevState;
+
+}ButtonConfig;
 
 
-void ButtonDrv_Init(void);
+void ButtonDrv_Init(ButtonConfig* buttonConfig, GPIO_TypeDef* Port, uint32_t Pin);
 void SetPeriod(uint16_t u16StateBtn);
 uint32_t f_ReturnValuePeriod();
 void ButtonDrv_MainFunction(void);

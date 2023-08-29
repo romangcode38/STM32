@@ -4,44 +4,76 @@
  *  Created on: Jun 6, 2023
  *      Author: romag
  */
-#include <stdbool.h>
-#include "LedDrv.h"
-#include "main.h"
-
-
-#define ButtonON		(1u)
-#define ButtonOFF		(0u)
+#include "ButtonDrv.h"
 
 static volatile unsigned int ru32_SysClickBtn = 0u;
 static volatile unsigned int ru32_TickBtn = 0u;
 
+uint16_t ru16_StateBtn = 0u;
 
-uint16_t ru16_StateBtn = SET;
-
-typedef struct
-{
-	GPIO_TypeDef* Port;
-	uint32_t Pin;
-	uint16_t PrevState;
-
-}ButtonConfig;
 
 ButtonConfig buttonConfig;
 
+/************************************************************************/
+/*!	\fn				f_GetReturnValuePeriod
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
 
-void ButtonDrv_Init(void)
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
+void ButtonDrv_Init(ButtonConfig* buttonConfig, GPIO_TypeDef* Port, uint32_t Pin)
 {
-	buttonConfig.Port = USER_BTN_GPIO_Port;
-	buttonConfig.Pin = USER_BTN_Pin;
-	buttonConfig.PrevState = RESET;
+	buttonConfig->Port = Port;
+	buttonConfig->Pin = Pin;
+	buttonConfig->PrevState = RESET;
+
 	ru32_SysClickBtn = 0;
+	ru16_StateBtn = SET;
 }
 
+/************************************************************************/
+/*!	\fn
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
+
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 uint32_t f_GetReturnValuePeriod()
 {
 	return ru32_TickBtn;
 }
 
+/************************************************************************/
+/*!	\fn				SetPeriod
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
+
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 void SetPeriod(uint16_t u16StateBtn)
 {
 	if (u16StateBtn == SET)
@@ -60,37 +92,24 @@ void SetPeriod(uint16_t u16StateBtn)
 	buttonConfig.PrevState = u16StateBtn;
 }
 
+/************************************************************************/
+/*!	\fn				ButtonDrv_MainFunction
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
 
-
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 void ButtonDrv_MainFunction()
 {
 	ru16_StateBtn = LL_GPIO_IsInputPinSet(buttonConfig.Port, buttonConfig.Pin);
 
 	SetPeriod(ru16_StateBtn);
 }
-
-//void ChangeButtonVallue(uint16_t u16IdBtn, uint32_t u32Tick)
-//{
-//	if (0 <= u32Tick && u32Tick <= 500)
-//	{
-//		f_ConfigValueSet(ButtonON, u16IdBtn, 1);
-//	}
-//	else if (500 <= u32Tick && u32Tick <= 1000)
-//	{
-//		f_ConfigValueSet(ButtonON, u16IdBtn, 2);
-//	}
-//	else if (1000 <= u32Tick && u32Tick <= 2000)
-//	{
-//		f_ConfigValueSet(ButtonON, u16IdBtn, 5);
-//	}
-//
-//	else if (2000 <= u32Tick && u32Tick <= 3000)
-//	{
-//		f_ConfigValueSet(ButtonON, u16IdBtn, 10);
-//	}
-//	else if (3000 <= u32Tick)
-//	{
-//		f_ConfigValueSet(ButtonOFF, u16IdBtn, 0);
-//		u32Tick = 0;
-//	}
-//}

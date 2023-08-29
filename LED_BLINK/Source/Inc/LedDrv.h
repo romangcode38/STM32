@@ -9,12 +9,13 @@
 #define LEDDRV_H_
 
 #include "main.h"
+#include "stdbool.h"
 
 typedef struct {
-	GPIO_TypeDef* LedPort;
-    uint32_t u32LedPin;
-    uint16_t u16LedPeriod;
-    uint16_t u16LedTimer;
+	GPIO_TypeDef* Ledx_Port;
+    uint32_t u32Ledx_Pin;
+    uint16_t u16Ledx_Period;
+    uint16_t u16Ledx_Timer;
 }TS_LedConfig;
 
 void LedDrv_Init(TS_LedConfig* ledConfig, GPIO_TypeDef* Port, uint16_t Pin);

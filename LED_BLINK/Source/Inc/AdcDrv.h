@@ -10,7 +10,7 @@
 
 #include "main.h"
 
-void AdcDrv_Init(void);
+void AdcDrv_Init(void *Ptr_Adc_Init);
 void AdcDrv_MainFunction(void);
 uint16_t AdcSetConverter_Value(void);
 

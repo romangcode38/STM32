@@ -13,6 +13,7 @@
 
 
 void Thermistor_InitFunction(void);
+uint16_t Theemistor_GetTemperatureFunction(void);
 void Thermistor_MainFunction(void);
 
 

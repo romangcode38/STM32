@@ -8,8 +8,21 @@
 #include "main.h"
 #include "CircularBuffer.h"
 
+/************************************************************************/
+/*!	\fn				f_isFullFIFOBuffer
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
 
-
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 bool f_isFullFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer)
 {
 	if (CircularFIFOBuffer->u16_BufferSize == (BUFFER_SIZE - 1))
@@ -22,6 +35,21 @@ bool f_isFullFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer)
 	}
 }
 
+/************************************************************************/
+/*!	\fn				f_isEmptyFIFOBuffer
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
+
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 bool f_isEmptyFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer)
 {
 	if (CircularFIFOBuffer->u16_BufferSize == 0)
@@ -35,7 +63,21 @@ bool f_isEmptyFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer)
 	}
 }
 
+/************************************************************************/
+/*!	\fn				f_addElemFIFOBuffer
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
 
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 bool f_addElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t data)
 {
 	if (f_isFullFIFOBuffer(CircularFIFOBuffer) != true)
@@ -52,6 +94,7 @@ bool f_addElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t data)
 			CircularFIFOBuffer->u16Head = 0;
 		}
 		CircularFIFOBuffer->u16_BufferSize++;
+
 		return true;
 	}
 	else
@@ -60,10 +103,26 @@ bool f_addElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t data)
 	}
 }
 
+/************************************************************************/
+/*!	\fn				f_getElemFIFOBuffer
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]		No input parameters
+ *	@param[out]		No output parameters
+ *
+ *	\return			No return value for this function
+
+ *	\attention		No special attention
+ *
+ *	\note
+ ************************************************************************/
 bool f_getElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t* theElement)
 {
 	if (f_isEmptyFIFOBuffer(CircularFIFOBuffer) != true)
 	{
+
 		*theElement = CircularFIFOBuffer->Buffer[CircularFIFOBuffer->u16Tail];
 		if (CircularFIFOBuffer->u16Tail < (BUFFER_SIZE-1))
 		{
@@ -73,6 +132,7 @@ bool f_getElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t* theEle
 		{
 			CircularFIFOBuffer->u16Tail = 0;
 		}
+
 		CircularFIFOBuffer->u16_BufferSize--;
 	}
 	else
@@ -81,4 +141,3 @@ bool f_getElemFIFOBuffer(CircularFIFOBuffer* CircularFIFOBuffer, uint8_t* theEle
 	}
 	return true;
 }
-

@@ -9,6 +9,7 @@
 #define INC_MOTOR_CONVERTERDEGREETOSTEP_H_
 
 #include "main.h"
+#include "MotorDrvStepper.h"
 
 void Motor_ConvDegreeTeStep_Init();
 void Motor_ConvDegreeToStep_GETValueFromUSART(float* fDegree);

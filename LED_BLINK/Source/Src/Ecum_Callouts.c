@@ -5,77 +5,186 @@
  *      Author: romag
  */
 
-#include "LedDrv.h"
-#include "ButtonDrv.h"
-#include "USARTDrv.h"
-#include "TheAPP.h"
-#include "USART_CommunicationProtocol.h"
-#include "Test.h"
-#include "AdcDrv.h"
-#include "ADC_ConverterValue.h"
-#include "CDD_Thermistor_CalcValue.h"
-#include "MotorDrvStepper.h"
-#include "Motor_ConverterDegreeToStep.h"
+#include "Ecum_Callouts.h"
 
 
 extern TS_LedConfig ledConfig1;
 extern TS_LedConfig ledConfig2;
-extern TS_LedConfig ledConfig3;
+extern TS_LedConfig ledConfigGreen;
+
+extern ButtonConfig buttonConfig;
 
 extern TS_MotorConfig MotorConfigPin1;
 extern TS_MotorConfig MotorConfigPin2;
 extern TS_MotorConfig MotorConfigPin3;
 extern TS_MotorConfig MotorConfigPin4;
 
+extern TS_PWMConfig Ts_PWMConfig_RGB_Red;
+extern TS_PWMConfig Ts_PWMConfig_RGB_Green;
+extern TS_PWMConfig Ts_PWMConfig_RGB_Blue;
+
+/************************************************************************/
+/*!	\fn					f_Ecum_InitBaseTask
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
 void f_Ecum_InitBaseTask(void)
 {
-	ButtonDrv_Init();
-	LedDrv_Init(&ledConfig1, LED_RED1_GPIO_Port, LED_RED1_Pin);
-	LedDrv_Init(&ledConfig2, LED_RED2_GPIO_Port, LED_RED2_Pin);
+	ButtonDrv_Init(&buttonConfig, USER_BTN_GPIO_Port, USER_BTN_Pin);
+	LedDrv_Init(&ledConfigGreen, LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+
 	f_MotorSteperDrv_Init(&MotorConfigPin1, MOTOR_PIN1_GPIO_Port, MOTOR_PIN1_Pin);
 	f_MotorSteperDrv_Init(&MotorConfigPin1, MOTOR_PIN2_GPIO_Port, MOTOR_PIN2_Pin);
 	f_MotorSteperDrv_Init(&MotorConfigPin1, MOTOR_PIN3_GPIO_Port, MOTOR_PIN3_Pin);
 	f_MotorSteperDrv_Init(&MotorConfigPin1, MOTOR_PIN4_GPIO_Port, MOTOR_PIN4_Pin);
+
+	USARTDrv_Init(MX_USART1_UART_Init);
 	f_USARTCommProt_Init();
-	USARTDrv_Init();
-	TheApp_Init();
-	AdcDrv_Init();
+
+	AdcDrv_Init(MX_ADC1_Init);
 	Adc_ConverterValue_Init();
+
 	Thermistor_InitFunction();
+
 	Motor_ConvDegreeTeStep_Init();
+
+    f_PWMDrv_Init(&Ts_PWMConfig_RGB_Red, TIM1, LL_TIM_CHANNEL_CH1, 0, LL_TIM_OC_SetCompareCH1);
+    f_PWMDrv_Init(&Ts_PWMConfig_RGB_Green, TIM1, LL_TIM_CHANNEL_CH2, 0, LL_TIM_OC_SetCompareCH2);
+    f_PWMDrv_Init(&Ts_PWMConfig_RGB_Blue, TIM1, LL_TIM_CHANNEL_CH3, 0, LL_TIM_OC_SetCompareCH3);
+	TheApp_Init();
 }
 
+/************************************************************************/
+/*!	\fn					f_Ecum_BaseRecurenceTask
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
 void f_Ecum_BaseRecurenceTask(void)
 {
 	AdcDrv_MainFunction();
-	USARTDrv_MainFunction();
-
 }
+
+/************************************************************************/
+/*!	\fn					f_Ecum_BaseRecurenceTaskDiv2
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
 void f_Ecum_BaseRecurenceTaskDiv2(void)
 {
-	TheAPP_MainFunction();
-
-}
-void f_Ecum_BaseRecurenceTaskDiv4(void)
-{
-	ButtonDrv_MainFunction();
-	LedDrv_MainFunction(&ledConfig1);
-	LedDrv_MainFunction(&ledConfig2);
-	AdcConverterValue_MainFunction();
-	Thermistor_MainFunction();
 	f_MotorSteperDrv_MainFunction();
 	Motor_ConvDegreeTeStep_MainFunction();
-
 }
+
+/************************************************************************/
+/*!	\fn					f_Ecum_BaseRecurenceTaskDiv4
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
+void f_Ecum_BaseRecurenceTaskDiv4(void)
+{
+	TheAPP_MainFunction();
+	f_PWMDrv_MainFunction();
+}
+
+/************************************************************************/
+/*!	\fn					f_Ecum_BaseRecurenceTaskDiv8
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
 void f_Ecum_BaseRecurenceTaskDiv8(void)
 {
-
+	AdcConverterValue_MainFunction();
+	Thermistor_MainFunction();
+	f_USARTCommProt_Main();
 }
+
+/************************************************************************/
+/*!	\fn					f_Ecum_BaseRecurenceTaskDiv16
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
 void f_Ecum_BaseRecurenceTaskDiv16(void)
 {
-	f_USARTCommProt_Main();
 
 }
+
+/************************************************************************/
+/*!	\fn					f_Ecum_BaseRecurenceTaskDiv32
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
 void f_Ecum_BaseRecurenceTaskDiv32(void)
 {
+	ButtonDrv_MainFunction();
+	LedDrv_MainFunction(&ledConfigGreen);
 }
