@@ -13,6 +13,7 @@
 #define TIME_OUT_PACKET			(1000 / TASK_PERIOD)
 #define TIME_PACKET_TRANSMIT	(120u / TASK_PERIOD)
 #define MAXIMUM_PWM_PERCENTAGE	(1000u)
+#define PI						(3.1415)
 
 bool u16FlagCallBack = false;
 
@@ -40,6 +41,14 @@ uint16_t u16Value_USART = 0u;
 uint16_t u16PreviousValueBlinkBtn = 0u;
 uint16_t u16PreviousValueBlinkUSART = 0u;
 
+uint32_t u32CallValueStorage = 0u;
+
+uint16_t u16PreviousCallDataCode = 0u;
+uint16_t u16PreviousCallUserCode = 0u;
+
+uint8_t u8IndexForButton = 0u;
+uint8_t u8ValueMotorFromIR_Remote = 0u;
+
 uint8_t u8CMD_DataLuminosity = 0u;
 uint8_t u8CMD_DataLed = 0u;
 uint8_t u8CMD_DataMotor = 0u;
@@ -48,8 +57,7 @@ uint8_t u8PacketSend[SEND_PACKET_DATA];
 
 uint8_t u8RequestStateValue = 0u;
 
-float fValueLux = 0.00f;
-
+bool bFlagIR_RemoteValue = false;	/* The flag from IR-Remote */
 
 float fValueUSARTForMotor = 0u;
 float flValueOnHysteresis = 0.f;
@@ -64,6 +72,9 @@ extern TS_LedConfig ledConfigGreen;
 extern TS_PWMConfig Ts_PWMConfig_RGB_Red;
 extern TS_PWMConfig Ts_PWMConfig_RGB_Green;
 extern TS_PWMConfig Ts_PWMConfig_RGB_Blue;
+
+
+
 
 TE_CommunicationState CommActualState;
 ByteBitField byteBitField;
@@ -94,10 +105,9 @@ void TheApp_Init(void)
 
 	u32ValueLuminosityCurrent = LUMINOSITY_MAX;
 
-	fValueLux = CALC_VALUE_TO_LUX(u32ValueLuminosityCurrent);
-
-	u16ValueRGB_SetRed = CONVERT_LUX_TO_RGB_RED(LUMINOSITY_MAX);
+	u16ValueRGB_SetRed = CONVERT_LUX_TO_RGB_RED(u32ValueLuminosityCurrent);
 	f_PWMDrv_SetVal_RGB(&Ts_PWMConfig_RGB_Red, &u16ValueRGB_SetRed);
+
 }
 
 /************************************************************************/
@@ -120,6 +130,7 @@ void TheAPP_MainFunction(void)
 
 	TheApp_CommunicationStateProtocol();
 	TheAPP_GetClickButton();
+	TheApp_SetVal_From_IrRemote();
 
 	if((TIME_TRANSMISSION_TEMP / TASK_PERIOD) <= u16TimeTransmissionTemp++)
 	{
@@ -172,11 +183,11 @@ void TheApp_SendTemperatureToUSART(void)
  ************************************************************************/
 void TheApp_VerificationHysteresis(void)
 {
-	flValueOnHysteresis = CALCULATE_PERCENTAGE_ON_LUMINOSITY(u32ValueLuminosityCurrent);
+	flValueOnHysteresis = CALCULATE_PERCENTAGE_ON_LUMINOSITY(u32ValueLuminosityOld);
 
 	if(u32ValueLuminosityCurrent > u32ValueLuminosityOld)
 	{
-		if((u32ValueLuminosityCurrent + flValueOnHysteresis) > u32ValueLuminosityCurrent)
+		if(u32ValueLuminosityCurrent > (u32ValueLuminosityOld + flValueOnHysteresis))
 		{
 			TheApp_SetReqForLedRGB(u32ValueLuminosityCurrent);
 			TheApp_SetReqForMotor(u32ValueLuminosityCurrent);
@@ -185,7 +196,7 @@ void TheApp_VerificationHysteresis(void)
 	}
 	else
 	{
-		if((u32ValueLuminosityCurrent - flValueOnHysteresis) < u32ValueLuminosityCurrent)
+		if((u32ValueLuminosityOld - flValueOnHysteresis) > u32ValueLuminosityCurrent)
 		{
 			TheApp_SetReqForLedRGB(u32ValueLuminosityCurrent);
 			TheApp_SetReqForMotor(u32ValueLuminosityCurrent);
@@ -345,6 +356,101 @@ void TheApp_SetReqForLedRGB(float fValue)
 	}
 }
 
+
+void TheApp_SetVal_From_IrRemote(void)
+{
+	if(bFlagIR_RemoteValue == true)
+	{
+		switch(u32CallValueStorage)
+		{
+			case 0xE619FF00:	/* ZERO */
+			{
+				break;
+			}
+			case 0xBA45FF00:	/* ONE */
+			{
+				break;
+			}
+			case 0xB946FF00:	/* TWO */
+			{
+				break;
+			}
+			case 0xB847FF00:	/* THREE */
+			{
+				break;
+			}
+			case 0xBB44FF00:	/* FOUR */
+			{
+				break;
+			}
+			case 0xBF40FF00:	/* FIVE */
+			{
+				break;
+			}
+			case 0xBC43FF00:	/* SIX */
+			{
+				break;
+			}
+			case 0xF807FF00:	/* SEVEN */
+			{
+				break;
+			}
+			case 0xEA15FF00:	/* EIGHT */
+			{
+				break;
+			}
+			case 0xF609FF00:	/* NINE */
+			{
+				break;
+			}
+			case 0xE916FF00:	/* STAR */
+			{
+				break;
+			}
+			case 0xF20DFF00:	/* HASHTAG */
+			{
+				break;
+			}
+			case 0xE718FF00:	/* UP */
+			{
+				u8IndexForButton++;
+				if(u8ValueMotorFromIR_Remote >= POSITION_DREGEE_MAX_MOTOR)
+				{
+					u8IndexForButton = POSITION_DREGEE_MAX_MOTOR;
+					u8ValueMotorFromIR_Remote = POSITION_DREGEE_MAX_MOTOR;
+				}
+				u8ValueMotorFromIR_Remote = OFFSET_FOR_MOTOR * u8IndexForButton;
+				bFlagIR_RemoteValue = false;
+				break;
+			}
+			case 0xAD52FF00:	/* DOWN */
+			{
+				u8IndexForButton--;
+				if((u8ValueMotorFromIR_Remote <= 0) || (u8IndexForButton <= 0))
+				{
+					u8IndexForButton = 0;
+					u8ValueMotorFromIR_Remote = 0;
+				}
+				u8ValueMotorFromIR_Remote = OFFSET_FOR_MOTOR * u8IndexForButton;
+				bFlagIR_RemoteValue = false;
+				break;
+			}
+			case 0xA55AFF00:	/* RIGHT */
+			{
+				break;
+			}
+			case 0xF708FF00:	/* LEFT */
+			{
+				break;
+			}
+			case 0xE31CFF00:	/* OK */
+			{
+				break;
+			}
+		}
+	}
+}
+
 /************************************************************************/
 /*!	\fn						TheApp_SetReqForMotor
  *	\brief
@@ -365,12 +471,13 @@ void TheApp_SetReqForMotor(float fValue)
 	if(fValue >= LUMINOSITY_MIN && fValue <= LUMINOSITY_MAX)
 	{
 		fValueMotorSteps = (float)CONVERT_LUX_TO_DEGREE(fValue);
-		Motor_ConvDegreeToStep_GETValueFromUSART((&fValueMotorSteps));
+		fValueMotorSteps += u8ValueMotorFromIR_Remote;
+		Motor_ConvDegreeToStep_GETValue((&fValueMotorSteps));
 	}
 	else
 	{
 		fValueMotorSteps = ZERO;
-		Motor_ConvDegreeToStep_GETValueFromUSART((&fValueMotorSteps));
+		Motor_ConvDegreeToStep_GETValue((&fValueMotorSteps));
 	}
 }
 
@@ -398,6 +505,28 @@ void TheAPP_GetClickButton(void)
 		u16PreviousValueBlinkBtn = u16SysClickBtn;
 	}
 }
+
+/************************************************************************/
+/*!	\fn						TheAPP_CallBack_GetIR_Remote_Value
+ *	\brief
+ *
+ *	\details
+ *
+ *	@param[in]
+ *	@param[out]
+ *
+ *	\return
+
+ *	\attention
+ *
+ *	\note
+ ************************************************************************/
+void TheAPP_CallBack_GetIR_Remote_Value(uint32_t u32StorageValue)
+{
+	u32CallValueStorage = u32StorageValue;
+	bFlagIR_RemoteValue = true;
+}
+
 
 /************************************************************************/
 /*!	\fn						TheAPP_CallBack_PWM
@@ -484,6 +613,7 @@ void TheAPP_CallBackReqTransmission(uint8_t u8RequestValue)
 {
 	u16FlagCallBack = true;
 	u8RequestStateValue = u8RequestValue;
+
 }
 
 /************************************************************************/

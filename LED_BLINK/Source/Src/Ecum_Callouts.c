@@ -23,6 +23,9 @@ extern TS_PWMConfig Ts_PWMConfig_RGB_Red;
 extern TS_PWMConfig Ts_PWMConfig_RGB_Green;
 extern TS_PWMConfig Ts_PWMConfig_RGB_Blue;
 
+extern TS_IR_Config IR_Config1;
+
+
 /************************************************************************/
 /*!	\fn					f_Ecum_InitBaseTask
  *	\brief
@@ -61,7 +64,12 @@ void f_Ecum_InitBaseTask(void)
     f_PWMDrv_Init(&Ts_PWMConfig_RGB_Red, TIM1, LL_TIM_CHANNEL_CH1, 0, LL_TIM_OC_SetCompareCH1);
     f_PWMDrv_Init(&Ts_PWMConfig_RGB_Green, TIM1, LL_TIM_CHANNEL_CH2, 0, LL_TIM_OC_SetCompareCH2);
     f_PWMDrv_Init(&Ts_PWMConfig_RGB_Blue, TIM1, LL_TIM_CHANNEL_CH3, 0, LL_TIM_OC_SetCompareCH3);
-	TheApp_Init();
+
+    IR_RemoteDrv_Init(&IR_Config1, TIM2, LL_TIM_CHANNEL_CH2, IR_Remote_IT_GPIO_Port, IR_Remote_IT_Pin);
+
+    I2CDrv_Init(MX_I2C1_Init);
+    f_LCD_Init();
+    TheApp_Init();
 }
 
 /************************************************************************/
@@ -82,6 +90,7 @@ void f_Ecum_InitBaseTask(void)
 void f_Ecum_BaseRecurenceTask(void)
 {
 	AdcDrv_MainFunction();
+
 }
 
 /************************************************************************/
@@ -103,6 +112,7 @@ void f_Ecum_BaseRecurenceTaskDiv2(void)
 {
 	f_MotorSteperDrv_MainFunction();
 	Motor_ConvDegreeTeStep_MainFunction();
+
 }
 
 /************************************************************************/
@@ -122,8 +132,12 @@ void f_Ecum_BaseRecurenceTaskDiv2(void)
  ************************************************************************/
 void f_Ecum_BaseRecurenceTaskDiv4(void)
 {
+
 	TheAPP_MainFunction();
 	f_PWMDrv_MainFunction();
+	IR_RemoteDrv_MainFunction();
+	f_LCD_MainFunction();
+
 }
 
 /************************************************************************/
@@ -146,6 +160,8 @@ void f_Ecum_BaseRecurenceTaskDiv8(void)
 	AdcConverterValue_MainFunction();
 	Thermistor_MainFunction();
 	f_USARTCommProt_Main();
+	Test_Drv();
+
 }
 
 /************************************************************************/
